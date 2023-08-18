@@ -1,5 +1,7 @@
 package com.example.vim.controllers;
 
+import com.example.vim.auth.AuthResponse;
+import com.example.vim.auth.LoginUserRequest;
 import com.example.vim.dao.EmailServiceDao;
 import com.example.vim.dao.ExampleFormDao;
 import com.example.vim.models.Example_form;
@@ -9,6 +11,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user/exampleForm/")
 @RequiredArgsConstructor
 public class ExampleFormController {
 
@@ -27,35 +31,33 @@ public class ExampleFormController {
 
     private final EmailServiceDao emailService;
 
-    @PostMapping(value="/example_forms/api/registerUserExampleForm")
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> loginUser(@RequestBody LoginUserRequest request){
+        AuthResponse response = exampleForm.loginUser(request);
+        if(response == null){
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/userInfo")
+    public Example_form usarioInfo(@RequestHeader (value = "Authorization") String token){
+        String usuario = jwtUtil.getValue(token);
+        if(usuario == null){
+            return null;
+        }
+        JSONObject valores = new JSONObject();
+        return exampleForm.userInfo(usuario);
+
+    }
+    @PostMapping("/api/registerUserExampleForm")
     public void registerUserExample(@RequestBody Example_form data){
         exampleForm.registerUserExample(data);
     }
 
-    @GetMapping(value="api/getUsersData/{id}")
-    public List<Example_form> getRegisterUsers(@PathVariable Long id){
-        return exampleForm.getRegisterUsers(id);
-    }
-
-    @GetMapping(value="api/getConfirmedUsersData/{id}")
-    public List<Example_form> getConfirmedUsers(@PathVariable Long id){
-        return exampleForm.getConfirmedUsersData(id);
-    }
-
-    // Validate the information of the user
-    @PostMapping(value="api/validateRegisterUser")
-    public void validateRegisterUser(@RequestBody Long folio){
-        exampleForm.validateRegisterUser(folio);
-    }
-
-    // Refuse the information of the user
-    @PostMapping(value="api/refuseRegisterUser")
-    public void refuseRegisterUser(@RequestBody Long id){
-        exampleForm.refuseRegisterUser(id);
-    }
 
     // Getting and returning values to create the Qrcode
-    @PostMapping(value="/example_forms/api/dataQrCode")
+    @PostMapping(value="/api/dataQrCode")
     public Example_form dataQrCode(@RequestBody String data){
         JSONObject obj = new JSONObject(data);
         String folio = obj.get("folio").toString();
@@ -65,10 +67,4 @@ public class ExampleFormController {
         return form;
     }
 
-    @GetMapping(value = "api/sendMailTest")
-    public void sendMailTest(){
-        Map<String, Object> model = new HashMap<>();
-        model.put("name", "Noel Galindo");
-        emailService.sendMail(model);
-    }
 }
