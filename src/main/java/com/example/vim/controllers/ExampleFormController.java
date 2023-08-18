@@ -39,35 +39,25 @@ public class ExampleFormController {
         }
         return ResponseEntity.ok(response);
     }
-    @PostMapping(value="/example_forms/api/registerUserExampleForm")
+
+    @PostMapping("/api/userInfo")
+    public Example_form usarioInfo(@RequestHeader (value = "Authorization") String token){
+        String usuario = jwtUtil.getValue(token);
+        if(usuario == null){
+            return null;
+        }
+        JSONObject valores = new JSONObject();
+        return exampleForm.userInfo(usuario);
+
+    }
+    @PostMapping("/api/registerUserExampleForm")
     public void registerUserExample(@RequestBody Example_form data){
         exampleForm.registerUserExample(data);
     }
 
-    @GetMapping(value="api/getUsersData/{id}")
-    public List<Example_form> getRegisterUsers(@PathVariable Long id){
-        return exampleForm.getRegisterUsers(id);
-    }
-
-    @GetMapping(value="api/getConfirmedUsersData/{id}")
-    public List<Example_form> getConfirmedUsers(@PathVariable Long id){
-        return exampleForm.getConfirmedUsersData(id);
-    }
-
-    // Validate the information of the user
-    @PostMapping(value="api/validateRegisterUser")
-    public void validateRegisterUser(@RequestBody Long folio){
-        exampleForm.validateRegisterUser(folio);
-    }
-
-    // Refuse the information of the user
-    @PostMapping(value="api/refuseRegisterUser")
-    public void refuseRegisterUser(@RequestBody Long id){
-        exampleForm.refuseRegisterUser(id);
-    }
 
     // Getting and returning values to create the Qrcode
-    @PostMapping(value="/example_forms/api/dataQrCode")
+    @PostMapping(value="/api/dataQrCode")
     public Example_form dataQrCode(@RequestBody String data){
         JSONObject obj = new JSONObject(data);
         String folio = obj.get("folio").toString();
@@ -77,10 +67,4 @@ public class ExampleFormController {
         return form;
     }
 
-    @GetMapping(value = "api/sendMailTest")
-    public void sendMailTest(){
-        Map<String, Object> model = new HashMap<>();
-        model.put("name", "Noel Galindo");
-        emailService.sendMail(model);
-    }
 }

@@ -3,13 +3,20 @@ package com.example.vim.controllers;
 import com.example.vim.auth.AuthService;
 import com.example.vim.auth.AuthUserInfo;
 import com.example.vim.dao.Solicitud_formulariosDao;
+import com.example.vim.models.Example_form;
 import com.example.vim.models.Formularios_enviados;
 import com.example.vim.models.Solicitud_formularios;
+import com.example.vim.models.User;
 import com.example.vim.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.sqm.UnknownEntityException;
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -64,6 +71,46 @@ public class Solicitud_formulariosController {
     @PostMapping("/userData")
     public AuthUserInfo userData(@RequestBody String token){
         return authService.usuarioInfo(token);
+    }
+
+    // ---------------- GETTING THE INFORMATION FROM THE INDIVIDUAL TABLES ---------------------------------------------
+
+    @GetMapping(value="api/getUsersData/{name}")
+    public ResponseEntity<List<Example_form>> getRegisterUsers(@PathVariable String name) {
+        try {
+            List<Example_form> Users =  solicitudDao.getRegisterUsers(name);
+            return ResponseEntity.ok(Users);
+        } catch (UnknownEntityException e) {
+            List<Example_form> Users = new ArrayList<>();
+            return ResponseEntity.badRequest().body(Users);
+        }
+
+    }
+
+
+    @GetMapping(value="api/getConfirmedUsersData/{name}")
+    public List<Example_form> getConfirmedUsers(@PathVariable String name){
+        return solicitudDao.getConfirmedUsersData(name);
+    }
+
+
+    // Validate the information of the user
+    @PostMapping(value="api/validateRegisterUser")
+    public void validateRegisterUser(@RequestBody String information){
+        JSONObject objeto = new JSONObject(information);
+        Long folio = Long.parseLong(objeto.getString("folio"));
+        String tableName = objeto.getString("tableName");
+        solicitudDao.validateRegisterUser(folio, tableName);
+    }
+
+
+    // Refuse the information of the user
+    @PostMapping(value="api/refuseRegisterUser")
+    public void refuseRegisterUser(@RequestBody String information){
+        JSONObject objeto = new JSONObject(information);
+        Long folio = Long.parseLong(objeto.getString("folio"));
+        String tableName = objeto.getString("tableName");
+        solicitudDao.refuseRegisterUser(folio, tableName);
     }
 }
 
