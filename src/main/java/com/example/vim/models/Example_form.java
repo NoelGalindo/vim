@@ -6,8 +6,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 
-@Entity
-@Table(name="example_form")
+
 public class Example_form {
 
     @Id

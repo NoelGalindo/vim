@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "solicitud_formularios") // Nombre de la tabla de la BD
+
 public class Solicitud_formularios {
     @Id
     @Getter @Setter @Column(name="id_formulario")

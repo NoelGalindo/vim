@@ -45,22 +45,21 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/user/exampleForm/**").permitAll()
-                                .requestMatchers("/availabelConferences/**").permitAll()
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/admin/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers("/user/exampleForm/**", "/auth/**", "/availabelEvents/**").permitAll()
+                                .requestMatchers("/admin/**", "/EventosEnviados/**").hasAnyRole(ADMIN.name())
 
-                                .requestMatchers(GET, "/admin/**").hasAnyAuthority(ADMIN_READ.name())
-                                .requestMatchers(POST, "/admin/**").hasAnyAuthority(ADMIN_CREATE.name())
-                                .requestMatchers(PUT, "/admin/**").hasAnyAuthority(ADMIN_UPDATE.name())
-                                .requestMatchers(DELETE, "/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
+                                .requestMatchers(GET, "/admin/**", "/EventosEnviados/**").hasAnyAuthority(ADMIN_READ.name())
+                                .requestMatchers(POST, "/admin/**", "/EventosEnviados/**").hasAnyAuthority(ADMIN_CREATE.name())
+                                .requestMatchers(PUT, "/admin/**", "/EventosEnviados/**").hasAnyAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers(DELETE, "/admin/**", "/EventosEnviados/**").hasAnyAuthority(ADMIN_DELETE.name())
 
-                                .requestMatchers("/solicitud_form/**").hasRole(MANAGER.name())
+                                .requestMatchers("/eventos/**", "/formularios/**").hasRole(MANAGER.name())
 
-                                .requestMatchers(GET, "/solicitud_form/**").hasAuthority(MANAGER_READ.name())
-                                .requestMatchers(POST, "/solicitud_form/**").hasAuthority(MANAGER_CREATE.name())
-                                .requestMatchers(PUT, "/solicitud_form/**").hasAuthority(MANAGER_UPDATE.name())
-                                .requestMatchers(DELETE, "/solicitud_form/**").hasAuthority(MANAGER_DELETE.name())
+                                .requestMatchers(GET, "/eventos/**", "/formularios/**").hasAuthority(MANAGER_READ.name())
+                                .requestMatchers(POST, "/eventos/**", "/formularios/**").hasAuthority(MANAGER_CREATE.name())
+                                .requestMatchers(PUT, "/eventos/**", "/formularios/**").hasAuthority(MANAGER_UPDATE.name())
+                                .requestMatchers(DELETE, "/eventos/**", "/formularios/**").hasAuthority(MANAGER_DELETE.name())
+
 
                                 .anyRequest().authenticated()
                         )

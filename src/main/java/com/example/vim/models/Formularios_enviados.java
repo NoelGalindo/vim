@@ -9,8 +9,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
-@Table(name="formularios_enviados")
+
 public class Formularios_enviados {
 
     @Id
