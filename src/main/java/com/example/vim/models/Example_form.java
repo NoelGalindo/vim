@@ -1,47 +1,62 @@
 package com.example.vim.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="example_form")
 public class Example_form {
 
     @Id
-    @Getter @Setter @Column(name="folio")
+    @Column(name="folio")
     @GeneratedValue(strategy= GenerationType.IDENTITY) // Que se genere automaticamente el id con el AutoIncrement
-    private long folio;
+    private int folio;
 
-    @Getter @Setter @Column(name="id_formulario")
-    private long id_formulario;
+    @Column(name="id_evento")
+    private int id_evento;
 
-    @Getter @Setter @Column(name="nombre")
-    private String nombre;
+    @Column(name="Nombre")
+    private String Nombre;
 
-    @Getter @Setter @Column(name="apellido_p")
-    private String apellid_p;
+    @Column(name="Apellido_P")
+    private String Apellid_P;
 
-    @Getter @Setter @Column(name="apellido_m")
+    @Column(name="Apellido_M")
     private String apellido_m;
 
-    @Getter @Setter @Column(name="sexo")
-    private String sexo;
+    @Column(name="Edad")
+    private int Edad;
 
-    @Getter @Setter @Column(name="email")
-    private String email;
+    @Column(name = "Soltero")
+    private boolean Soltero;
 
-    @Getter @Setter @Column(name="fecha")
-    private Timestamp fecha;
+    @Column(name = "Casado")
+    private boolean Casado;
 
-    @Getter @Setter @Column(name="voucher")
-    private String voucher;
+    @Column(name="Subscrito")
+    private boolean Subscrito;
 
-    @Getter @Setter @Column(name="asistencia")
-    private boolean asistencia;
+    @Column(name="Ejercicio")
+    private boolean Ejercicio;
 
-    @Getter @Setter @Column(name="validado")
-    private boolean validado;
+    @Column(name="Email")
+    private String Email;
+
+    @Column(name="Fecha")
+    private Date Fecha;
+
+    @Column(name="Voucher")
+    private String Voucher;
+
+    @Column(name="Asistencia")
+    private boolean Asistencia;
+
+    @Column(name="Validado")
+    private boolean Validado;
 }

@@ -1,7 +1,6 @@
 package com.example.vim.dao;
 
 
-import com.example.vim.models.ConferencesDTO;
 import com.example.vim.models.Example_form;
 import com.example.vim.models.Formularios_enviados;
 import com.example.vim.models.Solicitud_formularios;
@@ -11,7 +10,6 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.sqm.UnknownEntityException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Repository;
@@ -89,14 +87,6 @@ public class Solicitud_formulariosDaoImp implements Solicitud_formulariosDao{
         entityManager.merge(send);
     }
 
-    // USE TO GET THE PUBLISHED CONFERENCES
-    @Override
-    public List<ConferencesDTO> getConferences() {
-        String query="SELECT direccion_url, nombre_formulario, informacion_formulario, cupo_maximo FROM Solicitud_formularios WHERE status = 'Listo' ";
-        List<ConferencesDTO> conferences = entityManager.createQuery(query).getResultList();
-        return  conferences;
-    }
-
     @Override
     public List<Example_form> getRegisterUsers(String tableName) {
 
@@ -138,9 +128,9 @@ public class Solicitud_formulariosDaoImp implements Solicitud_formulariosDao{
     public void sendValidationEmail(Example_form form) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         Map<String, Object> model = new HashMap<>();
-        String nombre = form.getNombre()+" "+form.getApellid_p()+" "+form.getApellido_m();
+        //String nombre = form.getNombre()+" "+form.getApellid_p()+" "+form.getApellido_m();
         String folio = ""+form.getFolio();
-        model.put("name", nombre);
+        //model.put("name", nombre);
         model.put("folio", folio);
         String to = form.getEmail();
 

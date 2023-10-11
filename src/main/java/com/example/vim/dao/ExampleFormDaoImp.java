@@ -4,23 +4,15 @@ import com.example.vim.auth.AuthResponse;
 import com.example.vim.auth.LoginUserRequest;
 import com.example.vim.models.Example_form;
 import com.example.vim.models.Role;
-import com.example.vim.models.Solicitud_formularios;
 import com.example.vim.utils.JWTUtil;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import jakarta.mail.internet.MimeMessage;
+
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Repository;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import java.util.HashMap;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @Transactional
@@ -51,7 +43,6 @@ public class ExampleFormDaoImp implements ExampleFormDao {
 
     @Override
     public void registerUserExample(Example_form data) {
-        data.setId_formulario(301);
         entityManager.merge(data);
     }
 
@@ -69,7 +60,6 @@ public class ExampleFormDaoImp implements ExampleFormDao {
         }
 
         return null;
-
     }
 
     @Override
