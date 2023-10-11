@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/user/exampleForm/**", "/auth/**", "/availabelEvents/**").permitAll()
+                                .requestMatchers("/user/**", "/auth/**", "/availabelEvents/**").permitAll()
                                 .requestMatchers("/admin/**", "/EventosEnviados/**").hasAnyRole(ADMIN.name())
 
                                 .requestMatchers(GET, "/admin/**", "/EventosEnviados/**").hasAnyAuthority(ADMIN_READ.name())

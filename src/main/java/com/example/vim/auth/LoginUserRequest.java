@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 public class LoginUserRequest {
 
-    long folio;
+    int folio;
     String email;
 }

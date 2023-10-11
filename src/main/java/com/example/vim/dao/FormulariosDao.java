@@ -14,4 +14,11 @@ public interface FormulariosDao {
 
     void updateForm(Formularios form);
 
+    List<?> getRegisterUsers(int id);
+
+    List<?> getConfirmedUsers(int id);
+
+    String confirmRegisterUser(int id_evento, int folio);
+
+    String refuseRegisterUser(int id_evento, int folio);
 }

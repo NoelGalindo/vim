@@ -1,9 +1,10 @@
 package com.example.vim.dao;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public interface EmailServiceDao {
 
-    void sendMail(Map<String, Object> model);
+    void sendValidationMail(Map<String, Object> data, String destination);
 
 }

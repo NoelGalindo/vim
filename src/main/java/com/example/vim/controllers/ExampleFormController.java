@@ -6,19 +6,12 @@ import com.example.vim.dao.EmailServiceDao;
 import com.example.vim.dao.ExampleFormDao;
 import com.example.vim.models.Example_form;
 import com.example.vim.utils.JWTUtil;
-import lombok.Getter;
 
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user/exampleForm/")
@@ -29,7 +22,6 @@ public class ExampleFormController {
 
     private final JWTUtil jwtUtil;
 
-    private final EmailServiceDao emailService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> loginUser(@RequestBody LoginUserRequest request){
@@ -48,8 +40,8 @@ public class ExampleFormController {
         }
         JSONObject valores = new JSONObject();
         return exampleForm.userInfo(usuario);
-
     }
+
     @PostMapping("/api/registerUserExampleForm")
     public void registerUserExample(@RequestBody Example_form data){
         exampleForm.registerUserExample(data);
