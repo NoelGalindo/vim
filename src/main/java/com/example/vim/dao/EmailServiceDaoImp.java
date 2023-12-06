@@ -29,7 +29,7 @@ public class EmailServiceDaoImp implements EmailServiceDao{
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, "UTF-8");
             Template t = config.getTemplate("email-encurso.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, data);
-            message.setFrom("galindo091@gmail.com");
+            message.setFrom("registro@encurso.vim.com.mx");
             message.setTo(destination);
             message.setSubject("Información validada");
             message.setText(html, true);

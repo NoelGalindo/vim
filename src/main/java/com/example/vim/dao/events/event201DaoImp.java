@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -101,5 +103,15 @@ public class event201DaoImp implements event201Dao{
             return "Exito";
         }
         return "Error";
+    }
+
+    @Override
+    public List<?> validation(int folio) {
+        String query = "Select f.folio, f.nombre, f.apellido_p, f.apellido_m, e.imagen_evento, e.nombre_evento   FROM eventTable_201 f JOIN Eventos e ON f.id_evento = e.id_evento WHERE f.id_evento = 201 AND f.folio = :folio";
+        List<?> lista = entityManager.createQuery(query).setParameter("folio", folio).getResultList();
+        if(lista.isEmpty()){
+            return Collections.emptyList();
+        }
+        return lista;
     }
 }

@@ -1,9 +1,14 @@
 package com.example.vim.dao;
 
 import com.example.vim.models.Formularios;
+import com.example.vim.models.events.eventTable_201;
 import freemarker.template.Configuration;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +70,53 @@ public class FormulariosDaoImp implements  FormulariosDao{
     }
 
     @Override
+    public Workbook attendanceList(int id) {
+        String tableName = "eventTable_" + id;
+        String query = "SELECT folio, nombre, apellido_p, apellido_m, asistencia FROM " + tableName + " WHERE asistencia = true AND validado = true";
+        List<Object[]> attendance = entityManager.createQuery(query).getResultList();
+
+        Workbook workook = new XSSFWorkbook();
+        Sheet sheet = workook.createSheet("Asistencia");
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Folio");
+        headerRow.createCell(1).setCellValue("Nombre");
+        headerRow.createCell(2).setCellValue("Apellido P");
+        headerRow.createCell(3).setCellValue("Apellido M");
+        headerRow.createCell(4).setCellValue("Asistencia");
+
+        if(!attendance.isEmpty()){
+            int rowNumber = 1;
+
+            for (Object[] object : attendance){
+                int folio = (int) object[0];
+                String nombre = (String) object[1];
+                String apellido_p = (String) object[2];
+                String apellido_m = (String) object[3];
+                boolean asistencia = (boolean) object[4];
+                String valor = "";
+                if(asistencia == true)
+                    valor = "X";
+                else
+                    valor = "-";
+
+                Row valueRow = sheet.createRow(rowNumber);
+
+                valueRow.createCell(0).setCellValue(folio);
+                valueRow.createCell(1).setCellValue(nombre);
+                valueRow.createCell(2).setCellValue(apellido_p);
+                valueRow.createCell(3).setCellValue(apellido_m);
+                valueRow.createCell(4).setCellValue(valor);
+
+                rowNumber++;
+            }
+        }
+
+        return workook;
+    }
+
+    @Override
     public String confirmRegisterUser(int id_evento, int folio) {
         try{
             String tableName = "eventTable_"+id_evento;
@@ -100,6 +152,19 @@ public class FormulariosDaoImp implements  FormulariosDao{
         String query = "DELETE "+tableName+" WHERE folio = :entityId";
         entityManager.createQuery(query).setParameter("entityId", folio).executeUpdate();
         return "Exito";
+    }
+
+    @Override
+    public String markAttendance(int id_evento, int folio) {
+        String tableName = "eventTable_"+id_evento;
+        String query = "FROM "+tableName+" WHERE folio = :folio";
+        List<?> lista = entityManager.createQuery(query).setParameter("folio", folio).getResultList();
+        if(!lista.isEmpty()){
+            String queryUpdate = "UPDATE "+tableName+" t SET t.asistencia = :newStatus WHERE t.folio = :entityId";
+            entityManager.createQuery(queryUpdate).setParameter("newStatus", true).setParameter("entityId", folio).executeUpdate();
+            return "Exito";
+        }
+        return "Error";
     }
 
 
