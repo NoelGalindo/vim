@@ -13,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.vim.dao.events.event201Dao;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/user/event201/")
 @RequiredArgsConstructor
@@ -68,6 +72,13 @@ public class event201Controller {
     public ResponseEntity<String> validateAttendance(@RequestBody String id){
         int folio = Integer.parseInt(id);
         String response = event201Dao.validateAttendance(folio);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("api/validacion/{id}")
+    public ResponseEntity<List<?>> validation(@PathVariable String id){
+        int folio = Integer.parseInt(id);
+        List<?> response = event201Dao.validation(folio);
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(200));
     }
 
